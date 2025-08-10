@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secret</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="slideshow">
+  <div class="slides" id="slides">
+
+    <img src="./img/foto1.jpg" alt="Foto 1">
+    <img src="./img/foto2.jpg" alt="Foto 2">
+    <img src="./img/foto3.jpg" alt="Foto 3">
+    <img src="./img/foto4.jpg" alt="Foto 4">
+    <img src="./img/foto5.jpg"  alt="Foto 5">
+    <img src="./img/foto6.jpg"  alt="Foto 6">
+    <img src="./img/foto7.jpg"  alt="Foto 7">
+    <img src="./img/foto8.jpg"  alt="Foto 8">
+    <img src="./img/foto9.jpg"  alt="Foto 9">
+  </div>
+</div>
+
+<div class="descricao">
+ <h2>
+    Oii minha princesa, todos os meu dias ao seu lado,
+    estão sendo incriveis, espero nunca perder vc,
+    eu te amo tanto que não tenho palavrar pra descrever oq eu sinto
+    vc é uma pessoa incrivel que eu adorei conhecer,
+    se sentir amado por vc é maravilhoso o sentimento de paixão 
+    que eu tenho por vc é tão grande que daria pra fazer umas 30
+    coleções de livros e ainda sim não seria o suficiente,
+    vc é uma pessoa maravilhosa, perfeita, digna de uma coroa kkkk,
+    vc é cativante, sorriso ent nem se fale...
+    quero ter mais momentos inesqueciveis ao seu lado
+    e tbm espero que lembre da sigla neoqeav
+    (Nunca esqueça o quanto eu amo você)
+</h2>
+</div>
+
+
+<script>
+  const slides = document.getElementById("slides");
+  const imagens = slides.children;
+
+  // Duplicar imagens para efeito infinito
+  slides.innerHTML += slides.innerHTML;
+
+  let posicao = 0; // posição atual
+  let velocidade = 0.7; // pixels por frame (quanto maior, mais rápido)
+
+  function animar() {
+    posicao -= velocidade; // move para a esquerda
+    if (posicao <= - (slides.scrollWidth / 2)) {
+      // se chegou no meio da faixa duplicada, volta para o início
+      posicao = 0;
+    }
+    slides.style.transform = `translateX(${posicao}px)`;
+    requestAnimationFrame(animar); // chama de novo no próximo frame
+  }
+
+  animar();
+</script>
+</body>
+</html>

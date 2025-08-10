@@ -1,0 +1,38 @@
+  body {
+    background: purple;
+    color: aliceblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  /* Container */
+  .slideshow {
+    width: 500px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Faixa de imagens */
+  .slides {
+    display: flex;
+    width: max-content; /* tamanho conforme o número de imagens */
+  }
+
+  /* Cada imagem */
+  .slides img {
+    width: 500px;
+    height: 300px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+    .descricao {
+    margin-top: 15px;
+    font-size: 18px;
+    text-align: center;
+    max-width: 500px;
+    }
