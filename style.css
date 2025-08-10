@@ -1,38 +1,59 @@
-  body {
-    background: purple;
-    color: aliceblue;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
+body {
+  background: purple;
+  color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0; /* Remove margem padrão */
+  padding: 10px; /* Pequeno espaçamento para telas pequenas */
+}
 
-  /* Container */
+/* Container */
+.slideshow {
+  width: 100%;
+  max-width: 500px; /* Máximo de 500px, mas pode encolher */
+  height: auto;
+  overflow: hidden;
+  border-radius: 10px;
+  position: relative;
+}
+
+/* Faixa de imagens */
+.slides {
+  display: flex;
+  width: max-content;
+}
+
+/* Cada imagem */
+.slides img {
+  width: 100%; /* imagem ocupa 100% do container */
+  max-width: 500px; /* limite máximo */
+  height: auto; /* mantém proporção */
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Texto */
+.descricao {
+  margin-top: 15px;
+  font-size: 16px; /* fonte menor para celular */
+  text-align: center;
+  max-width: 500px;
+}
+
+/* Media Query para celular */
+@media (max-width: 600px) {
   .slideshow {
-    width: 500px;
-    height: 300px;
-    overflow: hidden;
-    border-radius: 10px;
-    position: relative;
+    max-width: 100%; /* ocupar toda largura possível */
   }
 
-  /* Faixa de imagens */
-  .slides {
-    display: flex;
-    width: max-content; /* tamanho conforme o número de imagens */
-  }
-
-  /* Cada imagem */
   .slides img {
-    width: 500px;
-    height: 300px;
-    object-fit: cover;
-    flex-shrink: 0;
+    max-width: 100%; /* ajustar para toda largura */
   }
 
-    .descricao {
-    margin-top: 15px;
-    font-size: 18px;
-    text-align: center;
-    max-width: 500px;
-    }
+  .descricao {
+    font-size: 14px; /* fonte ainda menor */
+    padding: 0 10px; /* espaçamento lateral */
+  }
+}
