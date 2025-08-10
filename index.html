@@ -1,30 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secret</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carrossel responsivo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="slideshow">
-  <div class="slides" id="slides">
-
-    <img src="./foto1.jpg" alt="Foto 1">
-    <img src="./foto2.jpg" alt="Foto 2">
-    <img src="./foto3.jpg" alt="Foto 3">
-    <img src="./foto4.jpg" alt="Foto 4">
-    <img src="./foto5.jpg"  alt="Foto 5">
-    <img src="./foto6.jpg"  alt="Foto 6">
-    <img src="./foto7.jpg"  alt="Foto 7">
-    <img src="./foto8.jpg"  alt="Foto 8">
-    <img src="./foto9.jpg"  alt="Foto 9">
-    <img src="./foto10.jfif"  alt="Foto 10">
+  <div class="slideshow">
+    <!-- Coloque aqui suas imagens. Use o caminho correto (ex: img/foto1.jpg) -->
+    <div class="slides" id="slides">
+    <img src="./img/foto1.jpg" alt="Foto 1">
+    <img src="./img/foto2.jpg" alt="Foto 2">
+    <img src="./img/foto3.jpg" alt="Foto 3">
+    <img src="./img/foto4.jpg" alt="Foto 4">
+    <img src="./img/foto5.jpg"  alt="Foto 5">
+    <img src="./img/foto6.jpg"  alt="Foto 6">
+    <img src="./img/foto7.jpg"  alt="Foto 7">
+    <img src="./img/foto8.jpg"  alt="Foto 8">
+    <img src="./img/foto9.jpg"  alt="Foto 9">
+    <img src="./img/foto10.jfif"  alt="Foto 10">
+    </div>
   </div>
-</div>
 
-<div class="descricao">
+  <div class="descricao">
  <h2>
     Oii minha princesa, todos os meu dias ao seu lado,
     estão sendo incriveis, espero nunca perder vc,
@@ -39,32 +39,92 @@
     e tbm espero que lembre da sigla neoqeav
     (Nunca esqueça o quanto eu amo você)
 </h2>
-</div>
+  </div>
 
+  <script>
+    /* ========= SLIDE AUTOMÁTICO INFINITO (RESPONSIVO) =========
+       Estratégia:
+       - Duplicamos o conteúdo do container .slides para criar um loop contínuo.
+       - Movemos o .slides para a esquerda alterando translateX em pixels.
+       - Quando a posição chega metade da largura (o bloco original já saiu),
+         resetamos a posição para 0 para continuar sem "pulos".
+       - Usamos requestAnimationFrame para animação suave e cálculo de delta time.
+    */
 
-<script>
-  const slides = document.getElementById("slides");
-  const imagens = slides.children;
+function () {
+      const slides = document.getElementById('slides');
+      let speed = 60; // velocidade em pixels por segundo (aumente/diminua conforme quiser)
+      let pos = 0;    // posição atual em px (translateX)
+      let lastTimestamp = null;
+      let halfWidth = 0;
+      let started = false;
+}
 
-  // Duplicar imagens para efeito infinito
-  slides.innerHTML += slides.innerHTML;
+      // duplicar o conteúdo pra criar área contínua
+    (function () {
+      const slides = document.getElementById('slides');
+      let speed = 60; // velocidade em pixels por segundo (aumente/diminua conforme quiser)
+      let pos = 0;    // posição atual em px (translateX)
+      let lastTimestamp = null;
+      let halfWidth = 0;
+      let started = false;
 
-  let posicao = 0; // posição atual
-  let velocidade = 0.7; // pixels por frame (quanto maior, mais rápido)
+      // duplicar o conteúdo pra criar área contínua
+      function duplicateSlides() {
+        // se já tiver duplicado ignorar
+        if (slides.dataset.duplicated === "true") return;
+        slides.innerHTML = slides.innerHTML + slides.innerHTML;
+        slides.dataset.duplicated = "true";
+      }
 
-  function animar() {
-    posicao -= velocidade; // move para a esquerda
-    if (posicao <= - (slides.scrollWidth / 2)) {
-      // se chegou no meio da faixa duplicada, volta para o início
-      posicao = 0;
-    }
-    slides.style.transform = `translateX(${posicao}px)`;
-    requestAnimationFrame(animar); // chama de novo no próximo frame
-  }
+      // Recalcula métricas (chame sempre no resize)
+      function recalc() {
+        halfWidth = slides.scrollWidth / 2; // metade da largura (corresponde ao bloco original)
+      }
 
-  animar();
-</script>
-</body>
-</html>
+      function animate(timestamp) {
+        if (!lastTimestamp) lastTimestamp = timestamp;
+        const delta = (timestamp - lastTimestamp) / 1000; // segundos desde o último frame
+        lastTimestamp = timestamp;
 
+        pos -= speed * delta; // move para a esquerda (valor negativo)
 
+        // quando a primeira metade saiu completamente, resetamos pos para 0 (loop)
+        if (Math.abs(pos) >= halfWidth) {
+          pos += halfWidth; // equivalente a pos = pos + halfWidth; mantém a continuidade
+        }
+
+        slides.style.transform = `translateX(${pos}px)`;
+        requestAnimationFrame(animate);
+      }
+
+      // inicia o loop (espera carregar imagens para medidas corretas)
+      function start() {
+        if (started) return;
+        started = true;
+        duplicateSlides();
+        recalc();
+        // pequenas proteções: se as imagens estiverem carregando, dar um timeout curto
+        setTimeout(() => {
+          recalc();
+          lastTimestamp = null;
+          requestAnimationFrame(animate);
+        }, 50);
+      }
+
+      // reinicia quando mudar o tamanho da janela (útil para rotacionar o celular)
+      function onResize() {
+        // pausa e recalcula rapidamente para evitar pulo visual
+        lastTimestamp = null;
+        recalc();
+      }
+
+      window.addEventListener('load', start);     // espera tudo carregar (imagens)
+      window.addEventListener('resize', onResize);
+
+      // opcional: permitir ajustar a velocidade por toque (ex.: mais lento no mobile)
+      if (window.matchMedia && window.matchMedia('(max-width:600px)').matches) {
+        speed = 50; // levemente mais lento em telas pequenas
+      }
+    })();
+  </script>
